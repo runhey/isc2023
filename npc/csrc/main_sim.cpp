@@ -37,7 +37,8 @@ int main(int argc, char **argv)
     tfp->open("wave.vcd");
 
     // Simulate until $finish
-    while (!contextp->gotFinish())
+    // !contextp->gotFinish()
+    while (contextp->time() <= 100)
     {
 
         int a = rand() & 1;
@@ -54,6 +55,7 @@ int main(int argc, char **argv)
 
     // Final model cleanup
     top->final();
+    tfp->close();
 
 #if VM_COVERAGE
     Verilated::mkdir("logs");
