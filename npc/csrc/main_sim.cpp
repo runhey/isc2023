@@ -1,11 +1,13 @@
 
 // Include common routines
-#include <verilated.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 // Include model header, generated from Verilating "top.v"
 #include "Vtop.h"
+#include "verilated_vcd_c.h"
+#include <verilated.h>
 
 int main(int argc, char **argv)
 {
@@ -31,7 +33,7 @@ int main(int argc, char **argv)
 
     const std::unique_ptr<Vtop> top{new Vtop{contextp.get(), "TOP"}};
     const std::unique_ptr<VerilatedVcdC> tfp{new VerilatedVcdC()};
-    top->trace(tfp, 0);
+    top->trace(tfp.get(), 0);
     tfp->open("wave.vcd");
 
     // Simulate until $finish
