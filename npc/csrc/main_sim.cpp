@@ -28,18 +28,24 @@ int main(int argc, char **argv)
     contextp->debug(0);
 
     // Construct the Verilated model, from Vtop.h generated from Verilating "top.v"
+
     const std::unique_ptr<Vtop> top{new Vtop{contextp.get(), "TOP"}};
+    const std::unique_ptr<VerilatedVcdC> tfp{new VerilatedVcdC()};
+    top->trace(tfp, 0);
+    tfp->open("wave.vcd");
 
     // Simulate until $finish
     while (!contextp->gotFinish())
     {
-        contextp->timeInc(1);
+
         int a = rand() & 1;
         int b = rand() & 1;
         top->a = a;
         top->b = b;
 
         top->eval();
+        tfp->dump(contextp->time());
+        contextp->timeInc(1);
         printf("[%" PRId64 "] | a = %d, b = %d, f = %d\n", contextp->time(), a, b, top->f);
         assert(top->f == (a ^ b));
     }
