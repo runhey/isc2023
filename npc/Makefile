@@ -36,6 +36,7 @@ include $(NVBOARD_HOME)/scripts/nvboard.mk
 # rules for verilator
 INCFLAGS = $(addprefix -I, $(INC_PATH))
 CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
+
 # BIN
 # 依赖 VSRCS CSRCS NVBOARD_ARCHIVE
 # 1. 执行 verilator + 参数
