@@ -18,4 +18,7 @@ sim:
 
 	$(VERILATOR) -cc --exe --build -j vsrc/top.v csrc/main_sim.cpp --trace
 
+clean:
+	rm -rf ./obj_dir
+
 include ../Makefile
