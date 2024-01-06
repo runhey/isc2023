@@ -1,6 +1,5 @@
 
 // Include common routines
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -40,7 +39,6 @@ int main(int argc, char **argv)
     // !contextp->gotFinish()
     while (contextp->time() <= 100)
     {
-
         int a = rand() & 1;
         int b = rand() & 1;
         top->a = a;
