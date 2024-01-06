@@ -95,7 +95,10 @@ CSRCS_LIGHT += $(SRC_AUTO_BIND)
 light: $(VSRCS_LIGHT) $(CSRCS_LIGHT) $(NVBOARD_ARCHIVE)
 	@rm -rf $(OBJ_DIR)
 	$(call git_commit, "SIM RTL light")
-	$(do_build)
+	$(VERILATOR) $(VERILATOR_CFLAGS) \
+		--top-module $(TOPNAME) $^ \
+		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
+		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
 
 
