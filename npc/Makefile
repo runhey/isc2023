@@ -19,7 +19,8 @@ VERILATOR_CFLAGS += -MMD --build -cc  \
 				-O3 --x-assign fast --x-initial fast --noassert --trace
 
 # 为什么必须要在这个位置
-default: $(BIN)
+default: 
+	@echo "请输入编译目标"
 
 $(shell mkdir -p $(BUILD_DIR))
 # constraint file
@@ -76,6 +77,7 @@ sim:
 
 clean:
 	rm -rf $(BUILD_DIR)
+	$(call git_commit, "sim RTL")
 
 VSRCS_DOUBLE_SWITCH = ./vsrc/double_switch.v 
 CSRCS_DOUBLE_SWITCH = $(abspath ./csrc/double_switch.cpp) 
@@ -86,14 +88,21 @@ double_switch: $(VSRCS_DOUBLE_SWITCH) $(CSRCS_DOUBLE_SWITCH) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "sim RTL")
 	$(do_build)
 
+VSRCS_LIGHT = $(abspath ./vsrc/light.v) 
+CSRCS_LIGHT = $(abspath ./csrc/light.cpp) 
+CSRCS_LIGHT += $(SRC_AUTO_BIND)
+light: $(VSRCS_LIGHT) $(CSRCS_LIGHT) $(NVBOARD_ARCHIVE)
+	@rm -rf $(OBJ_DIR)
+	$(call git_commit, "SIM RTL light")
+	$(do_build)
 
 
-.PHONY: default all clean run double_switch
 
 
 
 
 
 
+.PHONY: default all clean run double_switch light
 
 include ../Makefile
