@@ -48,6 +48,10 @@ $(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
+do_build = $(VERILATOR) $(VERILATOR_CFLAGS) \
+		--top-module $(TOPNAME) $^ \
+		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
+		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
 
 # default 依赖于 BIN
@@ -80,10 +84,7 @@ CSRCS_DOUBLE_SWITCH += $(SRC_AUTO_BIND)
 double_switch: $(VSRCS_DOUBLE_SWITCH) $(CSRCS_DOUBLE_SWITCH) $(NVBOARD_ARCHIVE)
 	@rm -rf $(OBJ_DIR)
 	$(call git_commit, "sim RTL")
-	$(VERILATOR) $(VERILATOR_CFLAGS) \
-		--top-module $(TOPNAME) $^ \
-		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
-		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
+	$(do_build)
 
 
 
