@@ -16,10 +16,11 @@ VERILATOR = $(VERILATOR_ROOT)/bin/verilator
 endif
 # 默认的编译参数
 VERILATOR_CFLAGS += -MMD --build -cc  \
-				-O3 --x-assign fast --x-initial fast --noassert --trace
+				-O3 --x-assign fast --x-initial fast --noassert
 
 # 为什么必须要在这个位置
-default: $(BIN)
+default: 
+	@echo "请输入编译目标"
 
 $(shell mkdir -p $(BUILD_DIR))
 # constraint file
@@ -34,7 +35,8 @@ CSRCS += $(SRC_AUTO_BIND)
 include $(NVBOARD_HOME)/scripts/nvboard.mk
 # rules for verilator
 INCFLAGS = $(addprefix -I, $(INC_PATH))
-CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
+CXXFLAGS += $(INCFLAGS) -DTOP_NAME=\"V$(TOPNAME)\"
+
 # BIN
 # 依赖 VSRCS CSRCS NVBOARD_ARCHIVE
 # 1. 执行 verilator + 参数
@@ -48,6 +50,10 @@ $(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
+do_build = $(VERILATOR) $(VERILATOR_CFLAGS) \
+		--top-module $(TOPNAME) $^ \
+		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
+		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
 
 # default 依赖于 BIN
@@ -72,6 +78,7 @@ sim:
 
 clean:
 	rm -rf $(BUILD_DIR)
+	$(call git_commit, "sim RTL")
 
 VSRCS_DOUBLE_SWITCH = ./vsrc/double_switch.v 
 CSRCS_DOUBLE_SWITCH = $(abspath ./csrc/double_switch.cpp) 
@@ -79,6 +86,15 @@ CSRCS_DOUBLE_SWITCH += $(SRC_AUTO_BIND)
 
 double_switch: $(VSRCS_DOUBLE_SWITCH) $(CSRCS_DOUBLE_SWITCH) $(NVBOARD_ARCHIVE)
 	@rm -rf $(OBJ_DIR)
+	$(call git_commit, "sim RTL")
+	$(do_build)
+
+VSRCS_LIGHT = $(abspath ./vsrc/light.v) 
+CSRCS_LIGHT = $(abspath ./csrc/light.cpp) 
+CSRCS_LIGHT += $(SRC_AUTO_BIND)
+light: $(VSRCS_LIGHT) $(CSRCS_LIGHT) $(NVBOARD_ARCHIVE)
+	@rm -rf $(OBJ_DIR)
+	$(call git_commit, "SIM RTL light")
 	$(VERILATOR) $(VERILATOR_CFLAGS) \
 		--top-module $(TOPNAME) $^ \
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
@@ -86,12 +102,11 @@ double_switch: $(VSRCS_DOUBLE_SWITCH) $(CSRCS_DOUBLE_SWITCH) $(NVBOARD_ARCHIVE)
 
 
 
-.PHONY: default all clean run double_switch
 
 
 
 
 
-
+.PHONY: default all clean run double_switch light
 
 include ../Makefile
