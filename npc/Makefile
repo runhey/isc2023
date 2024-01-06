@@ -16,7 +16,7 @@ VERILATOR = $(VERILATOR_ROOT)/bin/verilator
 endif
 # 默认的编译参数
 VERILATOR_CFLAGS += -MMD --build -cc  \
-				-O3 --x-assign fast --x-initial fast --noassert --trace
+				-O3 --x-assign fast --x-initial fast --noassert
 
 # 为什么必须要在这个位置
 default: 
