@@ -1,4 +1,3 @@
-`include "mux_key.v"
 module top(
     input [1:0] a0,
     input [1:0] a1,

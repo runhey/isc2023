@@ -100,7 +100,7 @@ light: $(VSRCS_LIGHT) $(CSRCS_LIGHT) $(NVBOARD_ARCHIVE)
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
-VSRCS_MUX41B = $(abspath ./vsrc/mux41b.v) 
+VSRCS_MUX41B = $(abspath ./vsrc/mux41b.v) $(abspath ./vsrc/mux_key.v)
 CSRCS_MUX41B = $(abspath ./csrc/main.cpp)
 CSRCS_MUX41B += $(SRC_AUTO_BIND)
 mux41b: $(VSRCS_MUX41B) $(CSRCS_MUX41B) $(NVBOARD_ARCHIVE)
