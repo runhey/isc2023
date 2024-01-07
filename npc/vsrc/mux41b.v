@@ -1,5 +1,6 @@
 module top(
     input clk,
+    input rst,
     input [1:0] a0,
     input [1:0] a1,
     input [1:0] a2,
