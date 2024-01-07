@@ -58,7 +58,7 @@ endmodule
 
 module bcd7seg (
     input [3:0] value,
-    output reg [6:0] segments,
+    output reg [6:0] segments
 );
 always @(*) begin
     case (value)
@@ -83,3 +83,4 @@ always @(*) begin
 end
     
 endmodule
+
