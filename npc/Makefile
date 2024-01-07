@@ -1,4 +1,4 @@
-TOPNAME = top  # 现在还不知道干啥的, 好像是设置输入的.v文件名字
+TOPNAME = top# 现在还不知道干啥的, 好像是设置输入的.v文件名字
 NXDC_FILES = constr/top.nxdc  # 引脚对应
 INC_PATH ?=
 
