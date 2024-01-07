@@ -108,9 +108,15 @@ mux41b: $(VSRCS_MUX41B) $(CSRCS_MUX41B) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "SIM RTL mux41b")
 	$(do_build)
 
+VSRCS_EX2_CODE =  $(abspath ./vsrc/ex2_code.v)
+CSRCS_EX2_CODE = $(abspath ./csrc/main.cpp) $(SRC_AUTO_BIND)
+ex2_code: $(VSRCS_EX2_CODE) $(CSRCS_EX2_CODE) $(NVBOARD_ARCHIVE)
+	@rm -rf $(OBJ_DIR)
+	$(call git_commit, "SIM RTL ex2_code")
+	$(do_build)
 
 
 
-.PHONY: default all clean run double_switch light mux41b
+.PHONY: default all clean run double_switch light mux41b ex2_code
 
 include ../Makefile
