@@ -1,4 +1,4 @@
-TOPNAME = top  # 现在还不知道干啥的, 好像是设置输入的.v文件名字
+TOPNAME = top# 现在还不知道干啥的, 好像是设置输入的.v文件名字
 NXDC_FILES = constr/top.nxdc  # 引脚对应
 INC_PATH ?=
 
@@ -100,13 +100,17 @@ light: $(VSRCS_LIGHT) $(CSRCS_LIGHT) $(NVBOARD_ARCHIVE)
 		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
 		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
 
+VSRCS_MUX41B = $(abspath ./vsrc/mux41b.v) $(abspath ./vsrc/mux_key.v)
+CSRCS_MUX41B = $(abspath ./csrc/main.cpp)
+CSRCS_MUX41B += $(SRC_AUTO_BIND)
+mux41b: $(VSRCS_MUX41B) $(CSRCS_MUX41B) $(NVBOARD_ARCHIVE)
+	@rm -rf $(OBJ_DIR)
+	$(call git_commit, "SIM RTL mux41b")
+	$(do_build)
 
 
 
 
-
-
-
-.PHONY: default all clean run double_switch light
+.PHONY: default all clean run double_switch light mux41b
 
 include ../Makefile
