@@ -27,12 +27,12 @@ reg button_down;
 button_press_detector i0 (control_up, button_up);
 button_press_detector i1 (control_down, button_down);
 
-always @(button_up or button_down) begin
-    if(button_up && (control_led < 3'b111)) begin 
+always @(posedge control_up or posedge control_down) begin
+    if(control_up && (control_led < 3'b111)) begin 
         control_led += 1 ;
         $display("Press button up: %x", control_led[2:0]);
     end
-    else if(button_down && (control_led > 3'b000)) begin 
+    else if(control_down && (control_led > 3'b000)) begin 
         control_led -= 1;
         $display("Press button down: %x", control_led[2:0]);
     end
