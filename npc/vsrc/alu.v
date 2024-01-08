@@ -72,5 +72,83 @@ assign zero = ~(| result);
 assign  overflow = a[3] == b[3] && a[3] != result[3]; 
 endmodule
 
+// 减法 补码的减法直接相加
+module suber (
+    input [3:0] a,
+    input [3:0] b,
+    output [3:0] result,
+    output carry,
+    output zero,
+    output overflow
+);
+assign {carry, result} = a + b;
+assign zero = ~(| result);
+assign  overflow = a[3] == b[3] && a[3] != result[3]; 
+endmodule
 
+// 取反
+module negater (
+    input [3:0] a,
+    output [3:0] result,
+    output zero
+);
+assign result = ~(0 | a);
+assign zero = ~(| result);
+
+endmodule
+
+// 与
+module ander (
+    input [3:0] a,
+    input [3:0] b,
+    output [3:0] result,
+    output zero
+);
+assign result = a & b;
+assign zero = ~(| result);
+endmodule
+
+// 或
+module orer (
+    input [3:0] a,
+    input [3:0] b,
+    output [3:0] result,
+    output zero
+);
+assign result = a | b;
+assign zero = ~(| result);
+endmodule
+
+// 异或
+module xorer (
+    input [3:0] a,
+    input [3:0] b,
+    output [3:0] result,
+    output zero
+);
+assign result = a ^ b;
+assign zero = ~(| result);
+endmodule
+
+// 比较大小
+module comparer (
+    input [3:0] a,
+    input [3:0] b,
+    output [3:0] result,
+    output zero
+);
+assign result[0] = a[3] >= b[3]? a[2:0] < b[2:0] : 0;
+assign zero = ~result[0];
+endmodule
+
+// 判断相等 
+module equailtier (
+    input [3:0] a,
+    input [3:0] b,
+    output [3:0] result,
+    output zero
+);
+assign result[0] = a == b;
+assign zero = ~result[0];
+endmodule
 
