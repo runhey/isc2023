@@ -122,6 +122,13 @@ alu: $(VSRCS_ALU) $(CSRCs_ALU) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "SIM RTL alu")
 	$(do_build)
 
-.PHONY: default all clean run double_switch light mux41b ex2_code alu
+VSRCS_SHIFT = $(abspath ./vsrc/shift.v)
+CSRCS_SHIFT = $(abspath ./csrc/main.cpp) $(SRC_AUTO_BIND)
+shift: $(VSRCS_SHIFT) $(CSRCS_SHIFT) $(NVBOARD_ARCHIVE)
+	@rm -rf $(OBJ_DIR)
+	$(call git_commit, "SIM RTL shift")
+	$(do_build)
+
+.PHONY: default all clean run double_switch light mux41b ex2_code alu shift
 
 include ../Makefile
