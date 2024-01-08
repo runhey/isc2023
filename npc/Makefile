@@ -115,8 +115,13 @@ ex2_code: $(VSRCS_EX2_CODE) $(CSRCS_EX2_CODE) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "SIM RTL ex2_code")
 	$(do_build)
 
+VSRCS_ALU = $(abspath ./vsrc/alu.v) $(abspath ./vsrc/component/button_press_detector.v)
+CSRCs_ALU = $(abspath ./csrc/main.cpp) $(SRC_AUTO_BIND)
+alu: $(VSRCS_ALU) $(CSRCs_ALU) $(NVBOARD_ARCHIVE)
+	@rm -rf $(OBJ_DIR)
+	$(call git_commit, "SIM RTL alu")
+	$(do_build)
 
-
-.PHONY: default all clean run double_switch light mux41b ex2_code
+.PHONY: default all clean run double_switch light mux41b ex2_code alu
 
 include ../Makefile
