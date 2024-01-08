@@ -17,8 +17,20 @@ top=top
 #f (LD0, LD1)
 
 # encoder decoder
-sw (SW7, SW6, SW5, SW4, SW3, SW2, SW1, SW0)
-enable SW8
-indicator LD4
-led (LD2, LD1, LD0)
-seg (SEG0G, SEG0F, SEG0E, SEG0D, SEG0C, SEG0B, SEG0A)
+#sw (SW7, SW6, SW5, SW4, SW3, SW2, SW1, SW0)
+#enable SW8
+#indicator LD4
+#led (LD2, LD1, LD0)
+#seg (SEG0G, SEG0F, SEG0E, SEG0D, SEG0C, SEG0B, SEG0A)
+
+# alu
+control_up BTNU
+control_down BTND
+a (SW3, SW2, SW1, SW0)
+b (SW7, SW6, SW5, SW4)
+control_led (LD15, LD14, LD13)
+result (LD6, LD5, LD4, LD3)
+carry LD2
+zero LD1
+overflow LD0
+
