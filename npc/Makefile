@@ -129,6 +129,13 @@ shift: $(VSRCS_SHIFT) $(CSRCS_SHIFT) $(NVBOARD_ARCHIVE)
 	$(call git_commit, "SIM RTL shift")
 	$(do_build)
 
-.PHONY: default all clean run double_switch light mux41b ex2_code alu shift
+VSRCS_PS2 = $(abspath ./vsrc/ps2.v)
+CSRCS_PS2 = $(abspath ./csrc/main.cpp) $(SRC_AUTO_BIND)
+ps2: $(VSRCS_PS2) $(CSRCS_PS2) $(NVBOARD_ARCHIVE)
+	@rm -rf $(OBJ_DIR)
+	$(call git_commit, "SIM RTL ps2 keyboard")
+	$(do_build)
+
+.PHONY: default all clean run double_switch light mux41b ex2_code alu shift ps2
 
 include ../Makefile
