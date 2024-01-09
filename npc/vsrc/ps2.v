@@ -35,6 +35,19 @@ seg_code i_seg_code(
     .segments2(seg_code2)
 );
 
+ascii_display i_ascii_display(
+    .pressed(pressed),
+    .code(ps2_keyboard_out),
+    .seg_ascii2(seg_ascii2),
+    .seg_ascii1(seg_ascii1)
+);
+
+seg_counter i_seg_counter(
+    .pressed(pressed),
+    .seg_count2(seg_count2),
+    .seg_count1(seg_count1)
+);
+
 endmodule
 
 
@@ -145,5 +158,116 @@ bcd7seg i1 (.value(code[7:4])
             ,.enable(pressed)
             ,.segments(segments2));
 endmodule
+
+
+module lut_ascii (
+    input [7:0] code,
+    output reg [3:0] ascii_code_high,
+    output reg [3:0] ascii_code_low 
+);
+always @(code) begin
+    case (code)
+        8'h1C : {ascii_code_high, ascii_code_low} = {4'h4, 4'h1}; //A
+        8'h32 : {ascii_code_high, ascii_code_low} = {4'h4, 4'h2}; //B
+        8'h21 : {ascii_code_high, ascii_code_low} = {4'h4, 4'h3}; //C
+        8'h23 : {ascii_code_high, ascii_code_low} = {4'h4, 4'h4}; //D
+        8'h24 : {ascii_code_high, ascii_code_low} = {4'h4, 4'h5}; //E
+        8'h2B : {ascii_code_high, ascii_code_low} = {4'h4, 4'h6}; //F
+        8'h34 : {ascii_code_high, ascii_code_low} = {4'h4, 4'h7}; //G
+        8'h33 : {ascii_code_high, ascii_code_low} = {4'h4, 4'h8}; //H
+        8'h43 : {ascii_code_high, ascii_code_low} = {4'h4, 4'h9}; //I
+        8'h3B : {ascii_code_high, ascii_code_low} = {4'h4, 4'hA}; //J
+        8'h42 : {ascii_code_high, ascii_code_low} = {4'h4, 4'hB}; //K
+        8'h4B : {ascii_code_high, ascii_code_low} = {4'h4, 4'hC}; //L
+        8'h3A : {ascii_code_high, ascii_code_low} = {4'h4, 4'hD}; //M
+        8'h31 : {ascii_code_high, ascii_code_low} = {4'h4, 4'hE}; //N
+        8'h44 : {ascii_code_high, ascii_code_low} = {4'h4, 4'hF}; //O
+        8'h4D : {ascii_code_high, ascii_code_low} = {4'h5, 4'h0}; //P
+        8'h15 : {ascii_code_high, ascii_code_low} = {4'h5, 4'h1}; //Q
+        8'h2D : {ascii_code_high, ascii_code_low} = {4'h5, 4'h2}; //R
+        8'h1B : {ascii_code_high, ascii_code_low} = {4'h5, 4'h3}; //S
+        8'h2C : {ascii_code_high, ascii_code_low} = {4'h5, 4'h4}; //T
+        8'h3C : {ascii_code_high, ascii_code_low} = {4'h5, 4'h5}; //U
+        8'h2A : {ascii_code_high, ascii_code_low} = {4'h5, 4'h6}; //V
+        8'h1D : {ascii_code_high, ascii_code_low} = {4'h5, 4'h7}; //W
+        8'h22 : {ascii_code_high, ascii_code_low} = {4'h5, 4'h8}; //X
+        8'h35 : {ascii_code_high, ascii_code_low} = {4'h5, 4'h9}; //Y
+        8'h1A : {ascii_code_high, ascii_code_low} = {4'h5, 4'hA}; //Z
+        8'h16 : {ascii_code_high, ascii_code_low} = {4'h3, 4'h1}; //不是右边的小键盘 1
+        8'h1E : {ascii_code_high, ascii_code_low} = {4'h3, 4'h2}; // 2
+        8'h26 : {ascii_code_high, ascii_code_low} = {4'h3, 4'h3}; // 3 
+        8'h25 : {ascii_code_high, ascii_code_low} = {4'h3, 4'h4}; // 4
+        8'h2E : {ascii_code_high, ascii_code_low} = {4'h3, 4'h5}; // 5
+        8'h36 : {ascii_code_high, ascii_code_low} = {4'h3, 4'h6}; // 6
+        8'h3D : {ascii_code_high, ascii_code_low} = {4'h3, 4'h7}; // 7
+        8'h3E : {ascii_code_high, ascii_code_low} = {4'h3, 4'h8}; // 8
+        8'h46 : {ascii_code_high, ascii_code_low} = {4'h3, 4'h9}; // 9
+        8'h45 : {ascii_code_high, ascii_code_low} = {4'h3, 4'h0}; // 0
+        default: {ascii_code_high, ascii_code_low} = {4'h4, 4'h1}; //A
+    endcase
+end
+endmodule
+
+module ascii_display (
+    input pressed,
+    input [7:0] code,
+    output reg [6:0] seg_ascii2,
+    output reg [6:0] seg_ascii1
+);
+wire [3:0] code_high;
+wire [3:0] code_low;
+
+lut_ascii i_lut_ascii(
+    .code(code),
+    .ascii_code_high(code_high),
+    .ascii_code_low(code_low)
+);
+bcd7seg i2_bcd7seg(
+    .value(code_high),
+    .enable(pressed),
+    .segments(seg_ascii2)
+);
+bcd7seg i1_bcd7seg(
+    .value(code_high),
+    .enable(pressed),
+    .segments(seg_ascii1)
+);
+endmodule
+
+
+module seg_counter (
+    input pressed,
+    output reg [6:0] seg_count2,
+    output reg [6:0] seg_count1
+);
+
+reg [3:0] count_high; //十位
+reg [3:0] count_low; //个位
+
+always @(negedge pressed) begin
+    count_low += 1;
+    if (count_low == 4'd10)begin
+        count_low = 0;
+        count_high += 1;
+    end
+    if (count_high == 4'd10)begin
+        count_high = 0;
+    end
+end
+
+bcd7seg i2_bcd7seg(
+    .value(count_high),
+    .enable(1),
+    .segments(seg_count2)
+);
+bcd7seg i1_bcd7seg(
+    .value(count_low),
+    .enable(1),
+    .segments(seg_count1)
+);
+
+endmodule
+
+
 
 
