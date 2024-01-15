@@ -228,7 +228,7 @@ bcd7seg i2_bcd7seg(
     .segments(seg_ascii2)
 );
 bcd7seg i1_bcd7seg(
-    .value(code_high),
+    .value(code_low),
     .enable(pressed),
     .segments(seg_ascii1)
 );

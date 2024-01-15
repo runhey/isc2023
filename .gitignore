@@ -14,3 +14,4 @@
 # 
 !/hdlbits/*/*.v
 /nvboard
+/am-kernels
