@@ -19,6 +19,15 @@
 #include <readline/history.h>
 #include "sdb.h"
 #include <utils.h>
+// 我写的
+#include "cmd.c"
+// static int cmd_si(char *args);
+// static int cmd_info(char *args);
+// static int cmd_x(char *args);
+// static int cmd_p(char *args);
+// static int cmd_w(char *args);
+// static int cmd_p(char *args);
+// static int cmd_d(char *args);
 
 static int is_batch_mode = false;
 extern NEMUState nemu_state;
@@ -70,8 +79,12 @@ static struct
     {"help", "Display information about all supported commands", cmd_help},
     {"c", "Continue the execution of the program", cmd_c},
     {"q", "Exit NEMU", cmd_q},
-
-    /* TODO: Add more commands */
+    {"si", "Step NEMU and the default value is 1", cmd_si},
+    {"info", "Show program status", cmd_info},
+    {"x", "Scan memory", cmd_x},
+    {"p", "Expression evaluation", cmd_p},
+    {"w", "Set a watch point", cmd_w},
+    {"d", "Delete a watch point", cmd_d},
 
 };
 
