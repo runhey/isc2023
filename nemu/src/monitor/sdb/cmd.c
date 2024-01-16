@@ -34,6 +34,7 @@ __attribute__((unused)) static int cmd_info(char *args)
     }
     else if (strcmp(arg, "w") == 0)
     {
+        show_wp_pool();
         return 0;
     }
     return 0;
