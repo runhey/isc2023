@@ -11,7 +11,8 @@ __attribute__((unused)) static int cmd_si(char *args)
     if (arg == NULL)
     {
         Log("You must Input the parameter number");
-        return 1;
+        cpu_exec(1);
+        return 0;
     }
     uint64_t number = atoi(arg);
     Log("Step number: %lu", number);
@@ -20,6 +21,21 @@ __attribute__((unused)) static int cmd_si(char *args)
 }
 __attribute__((unused)) static int cmd_info(char *args)
 {
+    char *arg = strtok(NULL, " ");
+    if (arg == NULL)
+    {
+        Log("You must Input the parameter number");
+        return 1;
+    }
+    if (strcmp(arg, "r") == 0)
+    {
+        isa_reg_display();
+        return 0;
+    }
+    else if (strcmp(arg, "w") == 0)
+    {
+        return 0;
+    }
     return 0;
 }
 __attribute__((unused)) static int cmd_x(char *args)
