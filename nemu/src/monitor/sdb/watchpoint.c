@@ -49,6 +49,6 @@ void show_wp_pool()
   printf("Show watch points ");
   for (int i = 0; i < NR_WP; i++)
   {
-    printf("NO: %4d next: %4d pw: %-16lx \n", wp_pool[i].NO, wp_pool[i].next->NO, wp_pool[i].address);
+    printf("NO: %4d next: %4d pw: 0x%-16lx \n", wp_pool[i].NO, wp_pool[i].next->NO, wp_pool[i].address);
   }
 }
