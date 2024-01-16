@@ -1,6 +1,21 @@
 #include "sdb.h"
+#include <common.h>
+#include <isa.h>
+#include <cpu/cpu.h>
+
+#include <stdlib.h>
+
 __attribute__((unused)) static int cmd_si(char *args)
 {
+    char *arg = strtok(NULL, " ");
+    if (arg == NULL)
+    {
+        Log("You must Input the parameter number");
+        return 1;
+    }
+    uint64_t number = atoi(arg);
+    Log("Step number: %lu", number);
+    cpu_exec(number);
     return 0;
 }
 __attribute__((unused)) static int cmd_info(char *args)
