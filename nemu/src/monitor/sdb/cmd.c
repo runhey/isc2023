@@ -45,15 +45,15 @@ __attribute__((unused)) static int cmd_x(char *args)
 }
 __attribute__((unused)) static int cmd_p(char *args)
 {
-    char *arg = strtok(NULL, " ");
-    if (arg == NULL)
-    {
-        Log("You must Input the parameter number");
-        return 1;
-    }
-    printf("The nemu recite: %s", arg);
+    // char *arg = strtok(NULL, " ");
+    // if (arg == NULL)
+    // {
+    //     Log("You must Input the parameter number");
+    //     return 1;
+    // }
+    printf("Input arg: %s\n", args);
     bool success;
-    __attribute__((unused)) word_t result = expr(arg, &success);
+    __attribute__((unused)) word_t result = expr(args, &success);
     return 0;
 }
 __attribute__((unused)) static int cmd_w(char *args)
