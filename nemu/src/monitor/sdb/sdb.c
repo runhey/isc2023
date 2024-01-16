@@ -18,8 +18,10 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <utils.h>
 
 static int is_batch_mode = false;
+extern NEMUState nemu_state;
 
 void init_regex();
 void init_wp_pool();
@@ -54,7 +56,7 @@ static int cmd_c(char *args)
 
 static int cmd_q(char *args)
 {
-  return 0;
+  return -1;
 }
 
 static int cmd_help(char *args);
@@ -149,6 +151,7 @@ void sdb_mainloop()
       {
         if (cmd_table[i].handler(args) < 0)
         {
+          nemu_state.state = NEMU_QUIT;
           return;
         }
         break;
