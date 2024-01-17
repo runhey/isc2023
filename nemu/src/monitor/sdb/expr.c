@@ -52,11 +52,11 @@ static struct rule
 
     {" +", TK_NOTYPE}, // spaces
     {"\\+", TK_PLUS},  // plus
-    {"-", TK_SUB},
-    {"*", TK_STAR},
-    {"/", TK_DIVIDE},
+    // {"-", TK_SUB},
+    // {"*", TK_STAR},
+    // {"/", TK_DIVIDE},
     {"==", TK_EQ}, // equal
-    {"!=", TK_UNEQUAL},
+    // {"!=", TK_UNEQUAL},
     {"&&", TK_AND}
     // {"\\(", TK_LEFT_BRACKETS},
     // {"\\)", TK_RIGHT_BRACKETS},
