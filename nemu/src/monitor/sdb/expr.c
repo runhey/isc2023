@@ -54,7 +54,7 @@ static struct rule
     {"\\+", TK_PLUS},  // plus
     // {"-", TK_SUB},
     // {"*", TK_STAR},
-    // {"/", TK_DIVIDE},
+    {"/", TK_DIVIDE},
     {"==", TK_EQ}, // equal
     {"!=", TK_UNEQUAL},
     {"&&", TK_AND}
