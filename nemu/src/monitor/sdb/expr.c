@@ -239,6 +239,7 @@ word_t eval(int p, int q)
   else
   {
     int op = find_op(p, q);
+    Log("Find the main op: %d", op);
     word_t val1 = eval(p, op - 1);
     word_t val2 = eval(op + 1, q);
     switch (tokens[op].type)
@@ -336,7 +337,7 @@ int find_op(int p, int q)
     {
       brackets_stack++;
     }
-    else if (tokens[i].type == TK_LEFT_BRACKETS)
+    else if (tokens[i].type == TK_RIGHT_BRACKETS)
     {
       brackets_stack--;
     }

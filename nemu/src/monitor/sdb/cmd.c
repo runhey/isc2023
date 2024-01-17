@@ -61,7 +61,7 @@ __attribute__((unused)) static int cmd_p(char *args)
     // }
 
     word_t result = expr(args, &success);
-    printf("表达式结果是：%ld", result);
+    printf("表达式结果是：%ld\n", result);
     return 0;
 }
 __attribute__((unused)) static int cmd_w(char *args)
