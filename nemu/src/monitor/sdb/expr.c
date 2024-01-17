@@ -71,6 +71,9 @@ static struct rule
 static regex_t re[NR_REGEX] = {};
 
 void add_token(int type, char *string, int n);
+word_t eval(int p, int q);
+bool check_parentheses(int p, int q);
+int find_op(int p, int q);
 
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
@@ -119,7 +122,7 @@ static bool make_token(char *e)
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+        Log("match rules[%2d] = \"%-16s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
@@ -167,7 +170,7 @@ static bool make_token(char *e)
         break;
       }
     }
-    printf("tokens[%2d]=> type: %7s, string: %-32s\n", i, class, tokens[i].str);
+    printf("tokens[%2d]=> type: %-20s, string: %-32s\n", i, class, tokens[i].str);
   }
 
   return true;
@@ -183,8 +186,8 @@ word_t expr(char *e, bool *success)
 
   /* TODO: Insert codes to evaluate the expression. */
   // TODO();
-
-  return 0;
+  *success = true;
+  return eval(0, nr_token - 1);
 }
 
 void add_token(int type, char *string, int n)
@@ -193,4 +196,166 @@ void add_token(int type, char *string, int n)
   strncpy(tokens[nr_token].str, string, n);
   nr_token++;
   return;
+}
+
+word_t eval(int p, int q)
+{
+  if (p > q)
+  {
+    Log("The p[%d] and q[%d] is invalid", p, q);
+    assert(0);
+  }
+  else if (p == q)
+  {
+    // 直接返回值就可以了
+    switch (tokens[p].type)
+    {
+    case TK_NUMBER:
+    case TK_ADDRESS:
+    {
+      return strtoul(tokens[p].str, NULL, 0);
+    }
+    break;
+    case TK_REG:
+    {
+      bool success;
+      word_t result = isa_reg_str2val(tokens[p].str, &success);
+      return result;
+    }
+    break;
+
+    default:
+    {
+      Log("eval tokens[%d] is invalid", p);
+      assert(0);
+    }
+    break;
+    }
+  }
+  else if (check_parentheses(p, q) == true)
+  {
+    return eval(p + 1, q - 1);
+  }
+  else
+  {
+    int op = find_op(p, q);
+    word_t val1 = eval(p, op - 1);
+    word_t val2 = eval(op + 1, q);
+    switch (tokens[op].type)
+    {
+    case TK_PLUS: // +
+    {
+      return val1 + val2;
+    }
+    break;
+    case TK_SUB: // -
+    {
+      return val1 - val2;
+    }
+    break;
+    case TK_STAR: // *
+    {
+      return val1 * val2;
+    }
+    break;
+    case TK_DIVIDE: // /
+    {
+      if (val2 == 0)
+      {
+        Log("The denominator of division is zero");
+        assert(0);
+      }
+      return val1 / val2;
+    }
+    break;
+    case TK_EQ: // ==
+    {
+      return val1 == val2;
+    }
+    break;
+    case TK_UNEQUAL: // !=
+    {
+      return val1 != val2;
+    }
+    break;
+    case TK_AND: // &&
+    {
+      return val1 && val2;
+    }
+    break;
+    default:
+    {
+      Log("The correct two-sided operator was not found");
+      assert(0);
+    }
+    break;
+    }
+  }
+}
+
+bool check_parentheses(int p, int q)
+{
+  // 用栈来表示
+  int match_number = 0;
+  if (tokens[p].type != TK_LEFT_BRACKETS)
+  {
+    return false;
+  }
+  if (tokens[q].type != TK_RIGHT_BRACKETS)
+  {
+    return false;
+  }
+  for (int i = p; i < q; i++)
+  {
+    if (tokens[i].type == TK_LEFT_BRACKETS)
+    {
+      match_number++;
+    }
+    if (tokens[i].type == TK_LEFT_BRACKETS)
+    {
+      match_number--;
+    }
+    if (match_number == 0 && i == p)
+    {
+      continue;
+    }
+    if (match_number < 0)
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+int find_op(int p, int q)
+{
+  int brackets_stack = 0;
+  for (int i = p; i < q; i++)
+  {
+    if (tokens[i].type == TK_LEFT_BRACKETS)
+    {
+      brackets_stack++;
+    }
+    else if (tokens[i].type == TK_LEFT_BRACKETS)
+    {
+      brackets_stack--;
+    }
+    else if (brackets_stack == 0 && tokens[i].type == TK_PLUS)
+    {
+      return i;
+    }
+    else if (brackets_stack == 0 && tokens[i].type == TK_SUB)
+    {
+      return i;
+    }
+    else if (brackets_stack == 0 && tokens[i].type == TK_STAR)
+    {
+      return i;
+    }
+    else if (brackets_stack == 0 && tokens[i].type == TK_DIVIDE)
+    {
+      return i;
+    }
+  }
+  return q;
 }
