@@ -349,6 +349,18 @@ int find_op(int p, int q)
     {
       return i;
     }
+  }
+  brackets_stack = 0;
+  for (int i = p; i < q; i++)
+  {
+    if (tokens[i].type == TK_LEFT_BRACKETS)
+    {
+      brackets_stack++;
+    }
+    else if (tokens[i].type == TK_RIGHT_BRACKETS)
+    {
+      brackets_stack--;
+    }
     else if (brackets_stack == 0 && tokens[i].type == TK_STAR)
     {
       return i;
