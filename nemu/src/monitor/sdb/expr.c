@@ -53,7 +53,7 @@ static struct rule
     {" +", TK_NOTYPE}, // spaces
     {"\\+", TK_PLUS},  // plus
     // {"-", TK_SUB},
-    // {"*", TK_STAR},
+    {"*", TK_STAR},
     {"/", TK_DIVIDE},
     {"==", TK_EQ}, // equal
     {"!=", TK_UNEQUAL},
