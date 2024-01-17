@@ -61,7 +61,7 @@ static struct rule
     {"\\(", TK_LEFT_BRACKETS},
     {"\\)", TK_RIGHT_BRACKETS},
     {"^0x[0-9a-fA-F]{8}", TK_ADDRESS},
-    {"^\\$[a-z]+", TK_REG},
+    {"^\\$[a-z0-9]+", TK_REG},
     {"^[0-9]+", TK_NUMBER},
 
 };
