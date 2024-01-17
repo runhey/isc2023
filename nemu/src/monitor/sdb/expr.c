@@ -60,9 +60,9 @@ static struct rule
     {"&&", TK_AND},
     {"\\(", TK_LEFT_BRACKETS},
     {"\\)", TK_RIGHT_BRACKETS},
-    {"0x\\d{8}", TK_ADDRESS},
+    {"^0x\\d{8}", TK_ADDRESS},
     {"^\\$[a-z]+", TK_REG},
-    {"\\d+", TK_NUMBER},
+    {"^\\d+", TK_NUMBER},
 
 };
 
