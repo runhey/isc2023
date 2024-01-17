@@ -60,9 +60,9 @@ static struct rule
     {"&&", TK_AND},
     {"\\(", TK_LEFT_BRACKETS},
     {"\\)", TK_RIGHT_BRACKETS},
-    {"0x(\\d{8})", TK_ADDRESS},
-    {"^\\[a-z]+", TK_REG},
-    {"(\\d+)", TK_NUMBER},
+    {"0x\\d{8}", TK_ADDRESS},
+    {"^\\$[a-z]+", TK_REG},
+    {"\\d+", TK_NUMBER},
 
 };
 
@@ -148,25 +148,26 @@ static bool make_token(char *e)
         break;
       }
     }
-    for (int i = 0; i < nr_token; i++)
-    {
-      const char *class;
-      for (int j = 0; j < NR_REGEX; j++)
-      {
-        if (rules[j].token_type == tokens[i].type)
-        {
-          class = rules[j].regex;
-          break;
-        }
-      }
-      printf("tokens[%2d]=> type: %7s, string: %-32s\n", i, class, tokens[i].str);
-    }
 
     if (i == NR_REGEX)
     {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
+  }
+
+  for (int i = 0; i < nr_token; i++)
+  {
+    const char *class;
+    for (int j = 0; j < NR_REGEX; j++)
+    {
+      if (rules[j].token_type == tokens[i].type)
+      {
+        class = rules[j].regex;
+        break;
+      }
+    }
+    printf("tokens[%2d]=> type: %7s, string: %-32s\n", i, class, tokens[i].str);
   }
 
   return true;
@@ -188,18 +189,8 @@ word_t expr(char *e, bool *success)
 
 void add_token(int type, char *string, int start, int end)
 {
-  for (int i = nr_token; i < TOKENT_MAX; i++)
-  {
-    if (strtok(tokens[i].str, "") == 0)
-    {
-      nr_token++;
-      continue;
-    }
-    tokens[i].type = type;
-    // *tokens[i].str = string[start, end];
-    strncpy(tokens[i].str, string, end - start);
-    nr_token++;
-    break;
-  }
+  tokens[nr_token].type = type;
+  strncpy(tokens[nr_token].str, string, end - start);
+  nr_token++;
   return;
 }
