@@ -57,12 +57,12 @@ static struct rule
     {"/", TK_DIVIDE},
     {"==", TK_EQ}, // equal
     {"!=", TK_UNEQUAL},
-    {"&&", TK_AND}
-    // {"\\(", TK_LEFT_BRACKETS},
-    // {"\\)", TK_RIGHT_BRACKETS},
-    // {"0x(\\d{8})", TK_ADDRESS},
-    // {"^\\[a-z]+", TK_REG},
-    // {"(\\d+)", TK_NUMBER},
+    {"&&", TK_AND},
+    {"\\(", TK_LEFT_BRACKETS},
+    {"\\)", TK_RIGHT_BRACKETS},
+    {"0x(\\d{8})", TK_ADDRESS},
+    {"^\\[a-z]+", TK_REG},
+    {"(\\d+)", TK_NUMBER},
 
 };
 
