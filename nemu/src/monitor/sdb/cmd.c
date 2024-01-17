@@ -46,13 +46,20 @@ __attribute__((unused)) static int cmd_x(char *args)
 __attribute__((unused)) static int cmd_p(char *args)
 {
     // char *arg = strtok(NULL, " ");
+    bool success;
     // if (arg == NULL)
     // {
     //     Log("You must Input the parameter number");
     //     return 1;
     // }
-    printf("Input arg: %s\n", args);
-    bool success;
+
+    // printf("Input arg: %s\n", args);
+    // while (arg != NULL)
+    // {
+    //     expr(arg, &success);
+    //     char *arg = strtok(NULL, " ");
+    // }
+
     __attribute__((unused)) word_t result = expr(args, &success);
     return 0;
 }
