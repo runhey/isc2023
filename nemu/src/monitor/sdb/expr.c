@@ -20,11 +20,25 @@
  */
 #include <regex.h>
 
+#define TOKENT_MAX 32
+
 enum
 {
   TK_NOTYPE = 256,
-  TK_EQ,
   TK_PLUS,
+  TK_SUB,
+  TK_TIME,  // 乘法
+  TK_POINT, // 指针
+  TK_STAR,  // *
+  TK_DIVIDE,
+  TK_EQ,
+  TK_UNEQUAL,
+  TK_AND,
+  TK_LEFT_BRACKETS, // 左括号
+  TK_RIGHT_BRACKETS,
+  TK_ADDRESS, //
+  TK_REG,     //
+  TK_NUMBER,
 
   /* TODO: Add more token types */
 
@@ -36,18 +50,27 @@ static struct rule
   int token_type;
 } rules[] = {
 
-    /* TODO: Add more rules.
-     * Pay attention to the precedence level of different rules.
-     */
-
     {" +", TK_NOTYPE}, // spaces
     {"\\+", TK_PLUS},  // plus
-    {"==", TK_EQ},     // equal
+    {"-", TK_SUB},
+    {"*", TK_STAR},
+    {"/", TK_DIVIDE},
+    {"==", TK_EQ}, // equal
+    {"!=", TK_UNEQUAL},
+    {"&&", TK_AND},
+    {"\\(", TK_LEFT_BRACKETS},
+    {"\\)", TK_RIGHT_BRACKETS},
+    {"0x(\\d{8})", TK_ADDRESS},
+    {"^\\$[a-z]+", TK_REG},
+    {"(\\d+)", TK_NUMBER},
+
 };
 
 #define NR_REGEX ARRLEN(rules)
 
 static regex_t re[NR_REGEX] = {};
+
+void add_token(int type, char *string, int start, int end);
 
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
@@ -75,7 +98,7 @@ typedef struct token
   char str[32];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[TOKENT_MAX] __attribute__((used)) = {};
 static int nr_token __attribute__((used)) = 0;
 
 static bool make_token(char *e)
@@ -99,8 +122,6 @@ static bool make_token(char *e)
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
-        position += substr_len;
-
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
@@ -108,11 +129,37 @@ static bool make_token(char *e)
 
         switch (rules[i].token_type)
         {
-        default:;
+        case TK_NOTYPE:
+          break;
+        //
+        // case TK_STAR:
+        // {
+        //   if(tokens[nr_token-1].type == TK_NUMBER)
+        // }
+        // break;
+        default:
+        {
+          add_token(rules[i].token_type, e, position, substr_len);
         }
+        break;
+        }
+        position += substr_len;
 
         break;
       }
+    }
+    for (int i = 0; i < nr_token; i++)
+    {
+      const char *class;
+      for (int j = 0; j < NR_REGEX; j++)
+      {
+        if (rules[j].token_type == tokens[i].type)
+        {
+          class = rules[j].regex;
+          break;
+        }
+      }
+      printf("tokens[%2d]=> type: %7s, string: %-32s\n", i, class, tokens[i].str);
     }
 
     if (i == NR_REGEX)
@@ -134,7 +181,25 @@ word_t expr(char *e, bool *success)
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  // TODO();
 
   return 0;
+}
+
+void add_token(int type, char *string, int start, int end)
+{
+  for (int i = nr_token; i < TOKENT_MAX; i++)
+  {
+    if (strtok(tokens[i].str, "") == 0)
+    {
+      nr_token++;
+      continue;
+    }
+    tokens[i].type = type;
+    // *tokens[i].str = string[start, end];
+    strncpy(tokens[i].str, string, end - start);
+    nr_token++;
+    break;
+  }
+  return;
 }
