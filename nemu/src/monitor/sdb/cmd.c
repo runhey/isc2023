@@ -60,7 +60,8 @@ __attribute__((unused)) static int cmd_p(char *args)
     //     char *arg = strtok(NULL, " ");
     // }
 
-    __attribute__((unused)) word_t result = expr(args, &success);
+    word_t result = expr(args, &success);
+    printf("表达式结果是：%ld", result);
     return 0;
 }
 __attribute__((unused)) static int cmd_w(char *args)
