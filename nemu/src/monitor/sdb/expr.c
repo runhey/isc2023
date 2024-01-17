@@ -70,7 +70,7 @@ static struct rule
 
 static regex_t re[NR_REGEX] = {};
 
-void add_token(int type, char *string, int start, int end);
+void add_token(int type, char *string, int n);
 
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
@@ -139,7 +139,7 @@ static bool make_token(char *e)
         // break;
         default:
         {
-          add_token(rules[i].token_type, e, position, substr_len);
+          add_token(rules[i].token_type, e + position, substr_len);
         }
         break;
         }
@@ -187,10 +187,10 @@ word_t expr(char *e, bool *success)
   return 0;
 }
 
-void add_token(int type, char *string, int start, int end)
+void add_token(int type, char *string, int n)
 {
   tokens[nr_token].type = type;
-  strncpy(tokens[nr_token].str, string, end - start);
+  strncpy(tokens[nr_token].str, string, n);
   nr_token++;
   return;
 }
