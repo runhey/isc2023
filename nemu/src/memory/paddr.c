@@ -26,7 +26,7 @@ static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 // 客户机到主机的地址转换
 // paddr 客户机的虚拟地址
 // 为什么有一个基地址
-uint8_t *guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
+uint8_t *guest_to_host(paddr_t paddr) { return pmem + paddr + CONFIG_MBASE; }
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 
 static word_t pmem_read(paddr_t addr, int len)
