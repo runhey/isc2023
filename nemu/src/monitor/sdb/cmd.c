@@ -54,7 +54,6 @@ __attribute__((unused)) int cmd_x(char *args)
     int n = atoi(str_n);
     bool success;
     word_t raaa = expr(args, &success);
-    printf("地址%ld", raaa);
     show_memery(n, raaa);
     return 0;
 }
@@ -79,8 +78,8 @@ __attribute__((unused)) int cmd_d(char *args)
 void show_memery(int n, word_t start)
 {
 
-    paddr_t address = (start & 0xFFFFFFFF) << 32;
-    address = 0x0004 + CONFIG_MBASE;
+    paddr_t address = (start & 0xFFFFFFFF) >> 32;
+    address = address + CONFIG_MBASE;
     for (int i = 0; i < n; i++)
     {
         address += i * 4;
