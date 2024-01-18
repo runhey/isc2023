@@ -53,9 +53,9 @@ __attribute__((unused)) int cmd_x(char *args)
     args = args + strlen(str_n) + 1;
     int n = atoi(str_n);
     bool success;
-    word_t result = expr(args, &success);
-    printf("地址%ld", result);
-    show_memery(n, result);
+    word_t raaa = expr(args, &success);
+    printf("地址%ld", raaa);
+    show_memery(n, raaa);
     return 0;
 }
 __attribute__((unused)) int cmd_p(char *args)
@@ -84,7 +84,7 @@ void show_memery(int n, word_t start)
     for (int i = 0; i < n; i++)
     {
         address += i * 4;
-        uint32_t val = *(uint32_t *)guest_to_host(address);
+        paddr_t val = *(paddr_t *)guest_to_host(address);
         printf("Guest Address [%x] value [%x] \n", address, val);
     }
     return;
