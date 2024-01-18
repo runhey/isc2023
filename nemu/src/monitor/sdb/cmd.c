@@ -78,7 +78,7 @@ __attribute__((unused)) int cmd_d(char *args)
 void show_memery(int n, word_t start)
 {
 
-    paddr_t address = ((start >> 32) & 0xFFFF);
+    paddr_t address = (paddr_t)start;
     address = address + CONFIG_MBASE;
     for (int i = 0; i < n; i++)
     {
