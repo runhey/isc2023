@@ -20,14 +20,7 @@
 #include "sdb.h"
 #include <utils.h>
 // 我写的
-#include "cmd.c"
-// static int cmd_si(char *args);
-// static int cmd_info(char *args);
-// static int cmd_x(char *args);
-// static int cmd_p(char *args);
-// static int cmd_w(char *args);
-// static int cmd_p(char *args);
-// static int cmd_d(char *args);
+// #include "cmd.c"
 
 static int is_batch_mode = false;
 extern NEMUState nemu_state;
