@@ -43,13 +43,14 @@ __attribute__((unused)) static int cmd_x(char *args)
 {
     // 扫描内存
     printf("没有分割前%s", args);
-    char *arg = strtok(NULL, " ");
-    if (arg == NULL)
+    char *sub_cmd = strtok(NULL, " ");
+    if (sub_cmd == NULL)
     {
         Log("You must Input the parameter number");
         return 0;
     }
-    printf("分割后的字符串 %s %s\n", args, arg);
+    args = args + strlen(sub_cmd) + 1;
+    printf("分割后的字符串 %s %s\n", args, sub_cmd);
     return 0;
 }
 __attribute__((unused)) static int cmd_p(char *args)
