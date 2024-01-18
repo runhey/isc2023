@@ -51,9 +51,13 @@ void show_wp_pool()
   // }
   printf("%8s %8s %4s %30s\n", "Num", "Type", "Enb", "What");
   WP *node = head;
-  while (node->next != NULL)
+  while (1)
   {
     printf("%8d %8s %4s %30s\n", node->NO, "hw", "y", node->expr);
+    if(node->next == NULL){
+      break;
+    }
+    node = node->next;
   }
 }
 
@@ -189,6 +193,7 @@ int wp_count(WP *head_node)
 WP *new_wp(char *str)
 {
   WP *node = wp_delete(free_);
+  printf("删除的节点: %d, %s, %d", node->NO, node->expr, node->next?1:0);
   node->next = NULL;
   node->expr = str;
   if (head == NULL)
