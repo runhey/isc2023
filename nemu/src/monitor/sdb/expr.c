@@ -60,7 +60,7 @@ static struct rule
     {"&&", TK_AND},
     {"\\(", TK_LEFT_BRACKETS},
     {"\\)", TK_RIGHT_BRACKETS},
-    {"^0x[0-9a-fA-F]{8}", TK_ADDRESS},
+    {"^0x[0-9a-fA-F]{4}", TK_ADDRESS},
     {"^\\$[a-z0-9]+", TK_REG},
     {"^[0-9]+", TK_NUMBER},
 
