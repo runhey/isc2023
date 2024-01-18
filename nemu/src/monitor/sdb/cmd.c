@@ -84,8 +84,8 @@ void show_memery(int n, word_t start)
     for (int i = 0; i < n; i++)
     {
         address += i * 4;
-        word_t val = host_read(guest_to_host(address), 4);
-        printf("Guest Address [%x] value [%lx] \n", address, val);
+        uint32_t val = *(uint32_t *)guest_to_host(address);
+        printf("Guest Address [%x] value [%x] \n", address, val);
     }
     return;
 }
