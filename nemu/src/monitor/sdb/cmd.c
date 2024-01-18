@@ -68,10 +68,19 @@ __attribute__((unused)) int cmd_p(char *args)
 }
 __attribute__((unused)) int cmd_w(char *args)
 {
+    new_wp(args);
     return 0;
 }
 __attribute__((unused)) int cmd_d(char *args)
 {
+    char *str_n = strtok(NULL, " ");
+    if (str_n == NULL)
+    {
+        Log("You must Input the parameter number");
+        return 0;
+    }
+    int number = atoi(str_n);
+    free_wp(number);
     return 0;
 }
 
