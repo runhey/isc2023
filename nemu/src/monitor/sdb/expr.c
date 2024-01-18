@@ -74,6 +74,7 @@ void add_token(int type, char *string, int n);
 word_t eval(int p, int q);
 bool check_parentheses(int p, int q);
 int find_op(int p, int q);
+word_t decpointer(word_t);
 
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
@@ -186,6 +187,35 @@ word_t expr(char *e, bool *success)
 
   /* TODO: Insert codes to evaluate the expression. */
   // TODO();
+  for (int i = 0; i < nr_token; i++)
+  {
+    if (i == 0 && tokens[i].type == '*')
+    {
+      tokens[i].type = TK_POINT;
+      continue;
+    }
+    if (tokens[i].type == '*')
+    {
+      switch (tokens[i - 1].type)
+      {
+      case TK_PLUS:
+      case TK_SUB:
+      case TK_STAR:
+      case TK_DIVIDE:
+      case TK_EQ:
+      case TK_UNEQUAL:
+      case TK_AND:
+      {
+        tokens[i].type = TK_POINT;
+      }
+      break;
+
+      default:
+        break;
+      }
+    }
+  }
+
   *success = true;
   return eval(0, nr_token - 1);
 }
@@ -236,10 +266,25 @@ word_t eval(int p, int q)
   {
     return eval(p + 1, q - 1);
   }
+  // else if(p+1 == q){ // 双目运算符
+  //   if(tokens[i].type != TK_POINT){
+  //     printf("You had input invliad *");
+  //     assert(0);
+  //   }
+
+  // }
   else
   {
+    //--------------------------------------------------------------------
+    // 这种情况就是有三个及以上的token
     int op = find_op(p, q);
     Log("Find the main op: %d", op);
+    // 对于 解指针运算符特殊处理
+    if (tokens[op].type == TK_POINT)
+    {
+      return decpointer(eval(op + 1, q));
+    }
+
     word_t val1 = eval(p, op - 1);
     word_t val2 = eval(op + 1, q);
     switch (tokens[op].type)
@@ -370,5 +415,26 @@ int find_op(int p, int q)
       return i;
     }
   }
+  brackets_stack = 0;
+  for (int i = p; i < q; i++)
+  {
+    if (tokens[i].type == TK_LEFT_BRACKETS)
+    {
+      brackets_stack++;
+    }
+    else if (tokens[i].type == TK_RIGHT_BRACKETS)
+    {
+      brackets_stack--;
+    }
+    else if (brackets_stack == 0 && tokens[i].type == TK_POINT)
+    {
+      return i;
+    }
+  }
   return q;
+}
+
+word_t decpointer(word_t)
+{
+  return 0;
 }
