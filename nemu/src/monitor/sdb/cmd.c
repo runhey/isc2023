@@ -79,7 +79,8 @@ __attribute__((unused)) int cmd_d(char *args)
 void show_memery(int n, word_t start)
 {
 
-    paddr_t address = (start & 0xFFFFFFFF) >> 32;
+    paddr_t address = (start & 0xFFFFFFFF) << 32;
+    address = 0x0012;
     for (int i = 0; i < n; i++)
     {
         address += i * 4;
