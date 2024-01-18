@@ -44,7 +44,6 @@ __attribute__((unused)) int cmd_info(char *args)
 __attribute__((unused)) int cmd_x(char *args)
 {
     // 扫描内存
-    printf("没有分割前%s", args);
     char *str_n = strtok(NULL, " ");
     if (str_n == NULL)
     {
