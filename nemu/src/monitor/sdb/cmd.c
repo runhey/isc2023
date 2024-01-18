@@ -2,10 +2,12 @@
 #include <common.h>
 #include <isa.h>
 #include <cpu/cpu.h>
+#include <memory/host.h>
+#include <memory/paddr.h>
 
 #include <stdlib.h>
 
-__attribute__((unused)) static int cmd_si(char *args)
+__attribute__((unused)) int cmd_si(char *args)
 {
     char *arg = strtok(NULL, " ");
     if (arg == NULL)
@@ -19,7 +21,7 @@ __attribute__((unused)) static int cmd_si(char *args)
     cpu_exec(number);
     return 0;
 }
-__attribute__((unused)) static int cmd_info(char *args)
+__attribute__((unused)) int cmd_info(char *args)
 {
     char *arg = strtok(NULL, " ");
     if (arg == NULL)
@@ -39,21 +41,24 @@ __attribute__((unused)) static int cmd_info(char *args)
     }
     return 0;
 }
-__attribute__((unused)) static int cmd_x(char *args)
+__attribute__((unused)) int cmd_x(char *args)
 {
     // 扫描内存
     printf("没有分割前%s", args);
-    char *sub_cmd = strtok(NULL, " ");
-    if (sub_cmd == NULL)
+    char *str_n = strtok(NULL, " ");
+    if (str_n == NULL)
     {
         Log("You must Input the parameter number");
         return 0;
     }
-    args = args + strlen(sub_cmd) + 1;
-    printf("分割后的字符串 %s %s\n", args, sub_cmd);
+    args = args + strlen(str_n) + 1;
+    int n = atoi(str_n);
+    bool success;
+    word_t result = expr(args, &success);
+    show_memery(n, result);
     return 0;
 }
-__attribute__((unused)) static int cmd_p(char *args)
+__attribute__((unused)) int cmd_p(char *args)
 {
     // char *arg = strtok(NULL, " ");
     bool success;
@@ -62,11 +67,23 @@ __attribute__((unused)) static int cmd_p(char *args)
     printf("表达式结果是：%ld\n", result);
     return 0;
 }
-__attribute__((unused)) static int cmd_w(char *args)
+__attribute__((unused)) int cmd_w(char *args)
 {
     return 0;
 }
-__attribute__((unused)) static int cmd_d(char *args)
+__attribute__((unused)) int cmd_d(char *args)
 {
     return 0;
+}
+
+void show_memery(int n, word_t start)
+{
+    word_t address = start;
+    for (int i = 0; i < n; i++)
+    {
+        address += i * 4;
+        word_t val = host_read(guest_to_host(address), 4);
+        printf("Guest Address [%lx] value [%lx] \n", address, val);
+    }
+    return;
 }
