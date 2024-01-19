@@ -64,17 +64,17 @@ void show_wp_pool()
 
     node = node->next;
   }
-  printf("-----------------------------------------------------------------------------\n");
-  node = free_;
-  while (1)
-  {
-    printf("%8d %8s %4s 0x%-10lx %30s\n", node->NO, "hw", "y", node->value, node->expr);
-    if (node->next == NULL)
-    {
-      break;
-    }
-    node = node->next;
-  }
+  // printf("-----------------------------------------------------------------------------\n");
+  // node = free_;
+  // while (1)
+  // {
+  //   printf("%8d %8s %4s 0x%-10lx %30s\n", node->NO, "hw", "y", node->value, node->expr);
+  //   if (node->next == NULL)
+  //   {
+  //     break;
+  //   }
+  //   node = node->next;
+  // }
 }
 
 // 从尾部添加

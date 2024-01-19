@@ -219,7 +219,7 @@ word_t expr(char *e, bool *success)
 
   *success = true;
   word_t result = eval(0, nr_token - 1);
-  printf("表达式[%s]的值是: ox%lx \n", e, result);
+  // printf("表达式[%s]的值是: ox%lx \n", e, result);
   return result;
 }
 
@@ -281,7 +281,7 @@ word_t eval(int p, int q)
     //--------------------------------------------------------------------
     // 这种情况就是有三个及以上的token
     int op = find_op(p, q);
-    Log("Find the main op: %d, p:%d, q:%d", op, p, q);
+    // Log("Find the main op: %d, p:%d, q:%d", op, p, q);
     // 对于 解指针运算符特殊处理
     if (tokens[op].type == TK_POINT)
     {
