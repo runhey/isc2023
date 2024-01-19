@@ -217,7 +217,7 @@ WP *wp_order(WP *head_node)
     }
     node = node->next;
   }
-  node->NO = count + 1;
+  node->NO = count;
   return head_node;
 }
 
