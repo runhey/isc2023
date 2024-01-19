@@ -48,6 +48,10 @@ void show_wp_pool()
   //   printf("NO: %4d next: %4d pw: 0x%-16lx \n", wp_pool[i].NO, wp_pool[i].next->NO, wp_pool[i].address);
   // }
   printf("%8s %8s %4s %30s\n", "Num", "Type", "Enb", "What");
+  if (head == NULL)
+  {
+    return;
+  }
   WP *node = head;
   while (1)
   {
@@ -56,6 +60,7 @@ void show_wp_pool()
     {
       break;
     }
+
     node = node->next;
   }
   printf("------------------------\n");
@@ -157,9 +162,13 @@ WP *wp_find_no(WP *head_node, int no)
   WP *node = head_node;
   while (node->NO != no)
   {
+    if (node->next == NULL)
+    {
+      printf("找到最后一个但是没有找到序号为 %d 的监视点\n", no);
+      assert(0);
+    }
     node = node->next;
   }
-  printf("找到的节点 %8d %8s %4s %d\n", node->NO, "hw", "y", node->next->NO);
   return node;
 }
 
