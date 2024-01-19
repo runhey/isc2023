@@ -12,7 +12,8 @@
  *
  * See the Mulan PSL v2 for more details.
  ***************************************************************************************/
-
+#include "sdb.h"
+#include <memory/paddr.h>
 #include <isa.h>
 
 /* We use the POSIX regex functions to process regular expressions.
@@ -217,7 +218,9 @@ word_t expr(char *e, bool *success)
   }
 
   *success = true;
-  return eval(0, nr_token - 1);
+  word_t result = eval(0, nr_token - 1);
+  printf("表达式[%s]的值是: ox%lx \n", e, result);
+  return result;
 }
 
 void add_token(int type, char *string, int n)
@@ -434,7 +437,10 @@ int find_op(int p, int q)
   return q;
 }
 
-word_t decpointer(word_t)
+word_t decpointer(word_t start)
 {
-  return 0;
+  paddr_t address = (paddr_t)start + CONFIG_MBASE;
+  paddr_t val = *(paddr_t *)guest_to_host(address);
+  printf("Guest Address [%x] value [%x] \n", address, val);
+  return (word_t)val;
 }

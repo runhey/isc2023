@@ -18,9 +18,24 @@
 
 #include <common.h>
 
+typedef struct watchpoint
+{
+  int NO;
+  struct watchpoint *next;
+
+  /* TODO: Add more members if necessary */
+  word_t value; // 记录上一次的值
+  char *expr;
+  word_t address;
+
+} WP;
+
 word_t expr(char *e, bool *success);
 void show_wp_pool();
 void show_memery(int n, word_t start);
+WP *new_wp(char *str);
+void free_wp(int no);
+bool check_wp();
 
 int cmd_si(char *args);
 int cmd_info(char *args);
