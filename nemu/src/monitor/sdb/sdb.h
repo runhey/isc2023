@@ -35,6 +35,7 @@ void show_wp_pool();
 void show_memery(int n, word_t start);
 WP *new_wp(char *str);
 void free_wp(int no);
+bool check_wp();
 
 int cmd_si(char *args);
 int cmd_info(char *args);

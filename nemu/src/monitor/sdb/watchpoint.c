@@ -14,6 +14,7 @@
  ***************************************************************************************/
 
 #include "sdb.h"
+// #include "watchpoint.h"
 
 #define NR_WP 32
 
@@ -55,7 +56,7 @@ void show_wp_pool()
   WP *node = head;
   while (1)
   {
-    printf("%8d %8s %4s %10lx %30s\n", node->NO, "hw", "y", node->value, node->expr);
+    printf("%8d %8s %4s 0x%-10lx %30s\n", node->NO, "hw", "y", node->value, node->expr);
     if (node->next == NULL)
     {
       break;
@@ -67,7 +68,7 @@ void show_wp_pool()
   node = free_;
   while (1)
   {
-    printf("%8d %8s %4s %10lx %30s\n", node->NO, "hw", "y", node->value, node->expr);
+    printf("%8d %8s %4s 0x%-10lx %30s\n", node->NO, "hw", "y", node->value, node->expr);
     if (node->next == NULL)
     {
       break;
@@ -264,7 +265,6 @@ word_t wp_update_value(WP *_node)
 WP *new_wp(char *str)
 {
   WP *node = wp_delete(free_);
-  printf("删除的节点: %d, %s, %d\n", node->NO, node->expr, node->next ? 1 : 0);
   node->next = NULL;
   node->expr = malloc(strlen(str));
   strcpy(node->expr, str);
@@ -297,4 +297,33 @@ void free_wp(int no)
   node->next = NULL;
   wp_add(free_, node);
   wp_order(free_);
+}
+
+// 检查监控点，true 表示一切正常
+bool check_wp()
+{
+  WP *node = head;
+  bool no_change = true;
+  if (node == NULL)
+  {
+    return no_change;
+  }
+  while (node->NO != 0 && node->expr != NULL)
+  {
+    bool success;
+    word_t value = expr(node->expr, &success);
+    if (value != node->value)
+    {
+      printf("监视点[%2d][%s]触发, 原先的值 ox%-8lx 现在的值 0x%-8lx", node->NO, node->expr, node->value, value);
+      node->value = value;
+      no_change = false;
+    }
+    // 更新
+    if (node->next == NULL)
+    {
+      return no_change;
+    }
+    node = node->next;
+  }
+  return no_change;
 }
