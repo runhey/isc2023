@@ -93,8 +93,13 @@ WP *wp_add(WP *head_node, WP *node)
   // }
   WP *pre = head_node;
   int count = 1;
-  while (pre->next != NULL)
+  while (1)
   {
+    if (pre->next == NULL)
+    {
+      count++;
+      break;
+    }
     pre = pre->next;
     count++;
   }
