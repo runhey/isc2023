@@ -92,7 +92,7 @@ WP *wp_add(WP *head_node, WP *node)
   //   }
   // }
   WP *pre = head_node;
-  int count = 0;
+  int count = 1;
   while (pre->next != NULL)
   {
     pre = pre->next;
@@ -154,6 +154,7 @@ WP *wp_find_no(WP *head_node, int no)
   {
     node = node->next;
   }
+  printf("找到的节点 %8d %8s %4s %d\n", node->NO, "hw", "y", node->next->NO);
   return node;
 }
 
@@ -162,24 +163,27 @@ WP *wp_del_no(WP *head_node, WP *node)
 {
   WP *_node = head_node;
   // 第一个
-  if (head_node->NO == node->NO)
+  if (_node->NO == node->NO)
   {
     _node = node->next;
     node->next = NULL;
+    node->NO = 0;
+    node->expr = NULL;
     return _node;
   }
   WP *pre = head_node;
   WP *cur = pre->next;
   while (1)
   {
-    if (cur->NO == node->NO)
+    if (cur->NO == node->NO) // 如果当前的就是要找的
     {
       if (cur->next != NULL)
       {
-        pre->next = cur->next;
+        pre->next = cur->next; // 桥接起来
       }
       node->next = NULL;
       node->NO = 0;
+      node->expr = NULL;
       return head_node;
     }
     if (cur->next == NULL)
@@ -257,4 +261,5 @@ void free_wp(int no)
   node->expr = NULL;
   node->next = NULL;
   wp_add(free_, node);
+  wp_order(free_);
 }
