@@ -121,11 +121,11 @@ static bool make_token(char *e)
     {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0)
       {
-        char *substr_start = e + position;
+        // char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%2d] = \"%-16s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        // Log("match rules[%2d] = \"%-16s\" at position %d with len %d: %.*s",
+        //     i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
@@ -190,12 +190,12 @@ word_t expr(char *e, bool *success)
   // TODO();
   for (int i = 0; i < nr_token; i++)
   {
-    if (i == 0 && tokens[i].type == '*')
+    if (i == 0 && tokens[i].type == TK_STAR)
     {
       tokens[i].type = TK_POINT;
       continue;
     }
-    if (tokens[i].type == '*')
+    if (tokens[i].type == TK_STAR)
     {
       switch (tokens[i - 1].type)
       {
@@ -281,7 +281,7 @@ word_t eval(int p, int q)
     //--------------------------------------------------------------------
     // 这种情况就是有三个及以上的token
     int op = find_op(p, q);
-    Log("Find the main op: %d", op);
+    Log("Find the main op: %d, p:%d, q:%d", op, p, q);
     // 对于 解指针运算符特殊处理
     if (tokens[op].type == TK_POINT)
     {
