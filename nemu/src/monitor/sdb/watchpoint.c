@@ -314,7 +314,7 @@ bool check_wp()
     word_t value = expr(node->expr, &success);
     if (value != node->value)
     {
-      printf("监视点[%2d][%s]触发, 原先的值 ox%-8lx 现在的值 0x%-8lx", node->NO, node->expr, node->value, value);
+      printf("监视点[%2d][%s]触发, 原先的值 ox%-8lx 现在的值 0x%-8lx\n", node->NO, node->expr, node->value, value);
       node->value = value;
       no_change = false;
     }
