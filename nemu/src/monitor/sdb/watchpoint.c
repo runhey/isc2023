@@ -218,7 +218,7 @@ WP *wp_order(WP *head_node)
   int count = 0;
   if (head_node == NULL)
   {
-    assert(0);
+    return NULL;
   }
   WP *node = head_node;
   while (1)
