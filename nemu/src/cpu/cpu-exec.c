@@ -50,7 +50,6 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc)
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 // 这里应该是我写的监控点
 #ifdef CONFIG_WATCHPOINT
-  printf("监视点检查\n");
   if (!check_wp())
   {
     // 有变化了

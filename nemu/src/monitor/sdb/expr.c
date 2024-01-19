@@ -219,7 +219,7 @@ word_t expr(char *e, bool *success)
 
   *success = true;
   word_t result = eval(0, nr_token - 1);
-  // printf("表达式[%s]的值是: ox%lx \n", e, result);
+  printf("表达式[%s]的值是: ox%lx \n", e, result);
   return result;
 }
 
