@@ -47,7 +47,7 @@ void show_wp_pool()
   // {
   //   printf("NO: %4d next: %4d pw: 0x%-16lx \n", wp_pool[i].NO, wp_pool[i].next->NO, wp_pool[i].address);
   // }
-  printf("%8s %8s %4s %30s\n", "Num", "Type", "Enb", "What");
+  printf("%8s %8s %4s %10s %30s\n", "Num", "Type", "Enb", "Value", "What");
   if (head == NULL)
   {
     return;
@@ -55,7 +55,7 @@ void show_wp_pool()
   WP *node = head;
   while (1)
   {
-    printf("%8d %8s %4s %30s\n", node->NO, "hw", "y", node->expr);
+    printf("%8d %8s %4s %10lx %30s\n", node->NO, "hw", "y", node->value, node->expr);
     if (node->next == NULL)
     {
       break;
@@ -63,11 +63,11 @@ void show_wp_pool()
 
     node = node->next;
   }
-  printf("------------------------\n");
+  printf("-----------------------------------------------------------------------------\n");
   node = free_;
   while (1)
   {
-    printf("%8d %8s %4s %30s\n", node->NO, "hw", "y", node->expr);
+    printf("%8d %8s %4s %10lx %30s\n", node->NO, "hw", "y", node->value, node->expr);
     if (node->next == NULL)
     {
       break;
@@ -215,6 +215,10 @@ WP *wp_del_no(WP *head_node, WP *node)
 WP *wp_order(WP *head_node)
 {
   int count = 0;
+  if (head_node == NULL)
+  {
+    assert(0);
+  }
   WP *node = head_node;
   while (1)
   {
@@ -243,13 +247,28 @@ int wp_count(WP *head_node)
   return count + 1;
 }
 
+// 更新表达式的值
+word_t wp_update_value(WP *_node)
+{
+  if (_node->expr == NULL)
+  {
+    printf("This %d node have no expr", _node->NO);
+    return 0;
+  }
+  bool success;
+  _node->value = expr(_node->expr, &success);
+  return _node->value;
+}
+
 // 从空闲的那儿拿一个出来，添加到使用中的列表
 WP *new_wp(char *str)
 {
   WP *node = wp_delete(free_);
   printf("删除的节点: %d, %s, %d\n", node->NO, node->expr, node->next ? 1 : 0);
   node->next = NULL;
-  node->expr = str;
+  node->expr = malloc(strlen(str));
+  strcpy(node->expr, str);
+  wp_update_value(node);
   if (head == NULL)
   {
     head = node;
@@ -272,6 +291,8 @@ void free_wp(int no)
   wp_order(head);
 
   node->NO = 0;
+  node->value = 0;
+  free(node->expr);
   node->expr = NULL;
   node->next = NULL;
   wp_add(free_, node);

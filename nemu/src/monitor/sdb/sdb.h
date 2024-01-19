@@ -24,7 +24,7 @@ typedef struct watchpoint
   struct watchpoint *next;
 
   /* TODO: Add more members if necessary */
-  word_t old_value; // 记录上一次的值
+  word_t value; // 记录上一次的值
   char *expr;
   word_t address;
 
