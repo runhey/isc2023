@@ -163,16 +163,16 @@ static bool make_token(char *e)
 
   for (int i = 0; i < nr_token; i++)
   {
-    // const char *class;
+    const char *class;
     for (int j = 0; j < NR_REGEX; j++)
     {
       if (rules[j].token_type == tokens[i].type)
       {
-        // class = rules[j].regex;
+        class = rules[j].regex;
         break;
       }
     }
-    // printf("tokens[%2d]=> type: %-20s, string: %-32s\n", i, class, tokens[i].str);
+    printf("tokens[%2d]=> type: %-20s, string: %-32s\n", i, class, tokens[i].str);
   }
 
   return true;
