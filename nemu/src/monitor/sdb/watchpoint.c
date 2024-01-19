@@ -17,8 +17,6 @@
 
 #define NR_WP 32
 
-
-
 #define LIST_FOREACH(head, next, current, TYPE) \
   TYPE *_node = NULL;                           \
   TYPE *current = NULL;                         \
@@ -54,7 +52,8 @@ void show_wp_pool()
   while (1)
   {
     printf("%8d %8s %4s %30s\n", node->NO, "hw", "y", node->expr);
-    if(node->next == NULL){
+    if (node->next == NULL)
+    {
       break;
     }
     node = node->next;
@@ -64,35 +63,46 @@ void show_wp_pool()
   while (1)
   {
     printf("%8d %8s %4s %30s\n", node->NO, "hw", "y", node->expr);
-    if(node->next == NULL){
+    if (node->next == NULL)
+    {
       break;
     }
     node = node->next;
   }
-  
 }
 
 // 从尾部添加
 WP *wp_add(WP *head_node, WP *node)
 {
+  // int count = 0;
+  // LIST_FOREACH(head_node, next, current, WP)
+  // {
+  //   count++;
+  //   if (count > NR_WP - 1)
+  //   {
+  //     Log("All watch points are in use");
+  //     assert(0);
+  //   }
+  //   if (current->next == NULL)
+  //   {
+  //     current->next = node;
+  //     node->next = NULL;
+  //     node->NO = count;
+  //     break;
+  //   }
+  // }
+  WP *pre = head_node;
   int count = 0;
-  LIST_FOREACH(head_node, next, current, WP)
+  while (pre->next != NULL)
   {
+    pre = pre->next;
     count++;
-    if (count > NR_WP - 1)
-    {
-      Log("All watch points are in use");
-      assert(0);
-    }
-    if (current->next == NULL)
-    {
-      current->next = node;
-      node->next = NULL;
-      node->NO = count;
-      break;
-    }
   }
-  return node;
+  node->NO = count;
+  node->next = NULL;
+  pre->next = node;
+
+  return head_node;
 }
 
 // 从尾部删除, 返回删除的节点
@@ -103,20 +113,35 @@ WP *wp_delete(WP *head_node)
     printf("You are delete the last node");
     return head_node;
   }
-  LIST_FOREACH(head_node, next, current, WP)
+  // LIST_FOREACH(head_node, next, current, WP)
+  // {
+  //   if (current->next != NULL)
+  //   {
+  //     WP *node = current->next;
+  //     if (node->next == NULL)
+  //     {
+  //       current->next = NULL;
+  //       node->NO = 0;
+  //       node->expr = NULL;
+  //       return node;
+  //     }
+  //   }
+  // }
+  WP *pre = head_node;
+  WP *cur = head_node->next;
+  while (1)
   {
-    if (current->next != NULL)
+    if (cur->next == NULL)
     {
-      WP *node = current->next;
-      if (node->next == NULL)
-      {
-        current->next = NULL;
-        node->NO = 0;
-        node->expr = NULL;
-        return node;
-      }
+      pre->next = NULL;
+      cur->NO = 0;
+      cur->expr = NULL;
+      return cur;
     }
+    pre = cur;
+    cur = cur->next;
   }
+
   assert(0);
   return NULL;
 }
@@ -204,7 +229,7 @@ int wp_count(WP *head_node)
 WP *new_wp(char *str)
 {
   WP *node = wp_delete(free_);
-  printf("删除的节点: %d, %s, %d", node->NO, node->expr, node->next?1:0);
+  printf("删除的节点: %d, %s, %d\n", node->NO, node->expr, node->next ? 1 : 0);
   node->next = NULL;
   node->expr = str;
   if (head == NULL)
